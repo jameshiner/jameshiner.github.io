@@ -1,56 +1,46 @@
-function Cell(x,y) {
-	this.x = x;
-	this.y = y;
-	this.walls = [true,true,true,true];
-	this.visited = false;
+class Cell {
+  constructor(x, y, h, w) {
+    this.x = x;
+    this.y = y;
+    this.height = h;
+    this.width = w;
+    this.walls = [true, true, true, true];
+    this.visited = false;
+  }
+
+  show() {
+    const { walls, x, y, height, width } = this;
+    const xPos = x * width;
+    const yPos = y * height;
+    stroke(255);
+    // top line
+    if (walls[0]) {
+      line(xPos, yPos, xPos + width, yPos);
+    } // right line
+    if (walls[1]) {
+      line(xPos + width, yPos, xPos + width, yPos + width);
+    } // bottom line
+    if (walls[2]) {
+      line(xPos + width, yPos + width, xPos, yPos + width);
+    } // left line
+    if (walls[3]) {
+      line(xPos, yPos + width, xPos, yPos);
+    }
+
+    if (this.visited) {
+      noStroke();
+      fill(255, 0, 255, 100);
+      rect(xPos, yPos, width, height);
+    }
+  }
+
+  highlight() {
+    const xpos = this.x * this.width;
+    const ypos = this.y * this.height;
+    if (this.visited) {
+      noStroke();
+      fill(0, 255, 0, 100);
+      rect(xpos, ypos, this.width, this.height);
+    }
+  }
 }
-
-Cell.prototype.show = function() {
-	var xpos = this.x * cellWidth;
-	var ypos = this.y * cellHeight;
-	stroke(255);
-	// top line
-	if(this.walls[0]) line(xpos,ypos,xpos+cellWidth,ypos);
-	// right line
-	if(this.walls[1]) line(xpos+cellWidth,ypos,xpos+cellWidth,ypos+cellWidth);
-	// bottom line
-	if(this.walls[2]) line(xpos+cellWidth,ypos+cellWidth,xpos,ypos+cellWidth);
-	// left line
-	if(this.walls[3]) line(xpos,ypos+cellWidth,xpos,ypos);
-
-
-	if(this.visited) {
-		noStroke();
-		fill(255,0,255,100);
-		rect(xpos,ypos,cellWidth,cellHeight);
-	}
-};
-
-Cell.prototype.checkNeighbors = function() {
-	var neighbors = [];
-	var top    = cells[index(this.x,this.y-1)];
-	var right  = cells[index(this.x+1,this.y)];
-	var bottom = cells[index(this.x,this.y+1)];
-	var left   = cells[index(this.x-1,this.y)];
-
-	if(top && !top.visited) neighbors.push(top);
-	if(right && !right.visited) neighbors.push(right);
-	if(bottom && !bottom.visited) neighbors.push(bottom);
-	if(left && !left.visited) neighbors.push(left);
-
-	if(neighbors.length > 0) {
-		var r = floor(random(0,neighbors.length))
-		return neighbors[r];
-	}
-	return undefined;
-};
-
-Cell.prototype.highlight = function() {
-	var xpos = this.x * cellWidth;
-	var ypos = this.y * cellHeight;
-	if(this.visited) {
-		noStroke();
-		fill(0,255,0,100);
-		rect(xpos,ypos,cellWidth,cellHeight);
-	}
-};
